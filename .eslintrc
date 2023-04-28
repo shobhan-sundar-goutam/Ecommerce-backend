@@ -13,6 +13,7 @@
     "linebreak-style": 0,
     "prefer-destructuring": "off",
     "import/extensions": "off",
+    "comma-dangle": "off",
     "prettier/prettier": [
       "off",
       {
