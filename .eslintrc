@@ -14,6 +14,7 @@
     "prefer-destructuring": "off",
     "import/extensions": "off",
     "comma-dangle": "off",
+    "func-names": "off",
     "prettier/prettier": [
       "off",
       {
