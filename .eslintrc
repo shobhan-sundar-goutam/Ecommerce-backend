@@ -11,10 +11,13 @@
     "no-console": 0,
     "indent": 0,
     "linebreak-style": 0,
+    "no-underscore-dangle": "off",
     "prefer-destructuring": "off",
     "import/extensions": "off",
     "comma-dangle": "off",
     "func-names": "off",
+    "object-shorthand": "off",
+    "no-return-await": "off",
     "prettier/prettier": [
       "off",
       {
