@@ -1,12 +1,7 @@
 import User from '../models/user.schema.js';
 import asyncHandler from '../utils/asyncHandler.js';
 import CustomError from '../utils/customError.js';
-import config from '../config/index.js';
-
-const cookieOptions = {
-  expires: new Date(Date.now() + config.COOKIE_EXPIRY * 24 * 60 * 60 * 1000),
-  httpOnly: true,
-};
+import sendToken from '../utils/sendToken.js';
 
 // Register/Signup
 export const signUp = asyncHandler(async (req, res) => {
@@ -32,17 +27,9 @@ export const signUp = asyncHandler(async (req, res) => {
     },
   });
 
-  const token = user.getJWTToken();
-
   user.password = undefined;
 
-  res.cookie('token', token, cookieOptions);
-
-  res.status(201).json({
-    success: true,
-    token,
-    user,
-  });
+  sendToken(user, 201, res);
 });
 
 // Login
@@ -65,15 +52,7 @@ export const login = asyncHandler(async (req, res) => {
     throw new CustomError('Invalid email or password', 401);
   }
 
-  const token = user.getJWTToken();
-
   user.password = undefined;
 
-  res.cookie('token', token, cookieOptions);
-
-  res.status(200).json({
-    success: true,
-    token,
-    user,
-  });
+  sendToken(user, 200, res);
 });
