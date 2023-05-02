@@ -44,3 +44,36 @@ export const signUp = asyncHandler(async (req, res) => {
     user,
   });
 });
+
+// Login
+export const login = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!(email && password)) {
+    throw new CustomError('Please fill all the details', 400);
+  }
+
+  const user = await User.findOne({ email }).select('+password');
+
+  if (!user) {
+    throw new CustomError('Invalid email or password', 401);
+  }
+
+  const isPasswordMatched = await user.comparePassword(password);
+
+  if (!isPasswordMatched) {
+    throw new CustomError('Invalid email or password', 401);
+  }
+
+  const token = user.getJWTToken();
+
+  user.password = undefined;
+
+  res.cookie('token', token, cookieOptions);
+
+  res.status(200).json({
+    success: true,
+    token,
+    user,
+  });
+});
