@@ -2,8 +2,8 @@ import User from '../models/user.schema.js';
 import asyncHandler from '../utils/asyncHandler.js';
 import CustomError from '../utils/customError.js';
 import sendToken from '../utils/sendToken.js';
+import sendEmail from '../utils/sendEmail.js';
 
-// Register/Signup
 export const signUp = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -32,7 +32,6 @@ export const signUp = asyncHandler(async (req, res) => {
   sendToken(user, 201, res);
 });
 
-// Login
 export const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
@@ -57,8 +56,7 @@ export const login = asyncHandler(async (req, res) => {
   sendToken(user, 200, res);
 });
 
-// Logout
-export const logout = asyncHandler(async (req, res) => {
+export const logout = asyncHandler(async (_req, res) => {
   res.cookie('token', null, {
     expires: new Date(Date.now()),
     httpOnly: true,
@@ -68,4 +66,47 @@ export const logout = asyncHandler(async (req, res) => {
     success: true,
     message: 'Logged out',
   });
+});
+
+export const forgotPassword = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    throw new CustomError('User not found', 404);
+  }
+
+  const resetToken = user.generateForgotPasswordToken();
+
+  await user.save({ validateBeforeSave: false });
+
+  const resetPasswordUrl = `${req.protocol}://${req.get(
+    'host'
+  )}/api/v1/auth/password/reset/${resetToken}`;
+
+  const text = `Your password reset token is :- \n\n ${resetPasswordUrl} \n\nIf you haven't requested this email, please ignore it.`;
+
+  try {
+    await sendEmail({
+      email: user.email,
+      subject: 'Shop-e-zone password recovery',
+      text,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: `Email sent to ${user.email} successfully`,
+    });
+  } catch (error) {
+    user.forgotPasswordToken = undefined;
+    user.forgotPasswordExpiry = undefined;
+
+    await user.save({ validateBeforeSave: false });
+
+    throw new CustomError(
+      error.message || 'Password reset email failed to send',
+      500
+    );
+  }
 });
