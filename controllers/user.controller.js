@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import User from '../models/user.schema.js';
 import asyncHandler from '../utils/asyncHandler.js';
 import CustomError from '../utils/customError.js';
@@ -85,7 +86,7 @@ export const forgotPassword = asyncHandler(async (req, res) => {
     'host'
   )}/api/v1/auth/password/reset/${resetToken}`;
 
-  const text = `Your password reset token is :- \n\n ${resetPasswordUrl} \n\nIf you haven't requested this email, please ignore it.`;
+  const text = `Hey ${user.name}, we received a request to reset your password for your Shop-e-zone account. To proceed, please click on the following link :- \n\n ${resetPasswordUrl} \n\nIf you haven't requested this email, please ignore it. \n\nPlease note that for security reasons, the link above will expire within 20 minutes. If the link has expired, you can request another password reset by clicking on the "Forgot Password" link on our login page. \n\nThank you for using Shop-e-zone! \n\nBest regards,\nShobhan Sundar Goutam (Founder, Shop-e-zone)`;
 
   try {
     await sendEmail({
@@ -109,4 +110,39 @@ export const forgotPassword = asyncHandler(async (req, res) => {
       500
     );
   }
+});
+
+export const resetPassword = asyncHandler(async (req, res) => {
+  const { password, confirmPassword } = req.body;
+
+  const resetPasswordToken = crypto
+    .createHash('sha256')
+    .update(req.params.token)
+    .digest('hex');
+
+  const user = await User.findOne({
+    forgotPasswordToken: resetPasswordToken,
+    forgotPasswordExpiry: { $gt: Date.now() },
+  });
+
+  if (!user) {
+    throw new CustomError(
+      'Reset Password Token is Invalid or has been expired',
+      400
+    );
+  }
+
+  if (password !== confirmPassword) {
+    throw new CustomError('Password and Confirm Password does not match', 400);
+  }
+
+  user.password = password;
+  user.forgotPasswordToken = undefined;
+  user.forgotPasswordExpiry = undefined;
+
+  await user.save();
+
+  user.password = undefined;
+
+  sendToken(user, 200, res);
 });
