@@ -4,7 +4,7 @@ import CustomError from '../utils/customError.js';
 import config from '../config/index.js';
 import User from '../models/user.schema.js';
 
-export const isLoggedIn = asyncHandler(async (req, res, next) => {
+export const isLoggedIn = asyncHandler(async (req, _res, next) => {
   let token;
 
   if (
