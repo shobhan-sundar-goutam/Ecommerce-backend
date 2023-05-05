@@ -6,6 +6,7 @@ import {
   forgotPassword,
   resetPassword,
   getUserProfileDetails,
+  changePassword,
 } from '../controllers/user.controller.js';
 import { isLoggedIn } from '../middlewares/auth.middleware.js';
 
@@ -17,5 +18,6 @@ router.get('/auth/logout', logout);
 router.post('/auth/password/forgot', forgotPassword);
 router.post('/auth/password/reset/:token', resetPassword);
 router.get('/auth/profile', isLoggedIn, getUserProfileDetails);
+router.put('/auth/password/update', isLoggedIn, changePassword);
 
 export default router;

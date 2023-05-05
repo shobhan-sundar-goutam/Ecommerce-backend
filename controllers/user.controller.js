@@ -72,6 +72,10 @@ export const logout = asyncHandler(async (_req, res) => {
 export const forgotPassword = asyncHandler(async (req, res) => {
   const { email } = req.body;
 
+  if (!email) {
+    throw new CustomError('Please provide your registered email id', 400);
+  }
+
   const user = await User.findOne({ email });
 
   if (!user) {
@@ -114,6 +118,10 @@ export const forgotPassword = asyncHandler(async (req, res) => {
 
 export const resetPassword = asyncHandler(async (req, res) => {
   const { password, confirmPassword } = req.body;
+
+  if (!(password && confirmPassword)) {
+    throw new CustomError('Please fill all the details', 400);
+  }
 
   const resetPasswordToken = crypto
     .createHash('sha256')
@@ -158,4 +166,36 @@ export const getUserProfileDetails = asyncHandler(async (req, res) => {
     success: true,
     user,
   });
+});
+
+export const changePassword = asyncHandler(async (req, res) => {
+  const { oldPassword, newPassword, confirmPassword } = req.body;
+
+  if (!(oldPassword && newPassword && confirmPassword)) {
+    throw new CustomError('Please fill all the details', 400);
+  }
+
+  const user = await User.findById(req.user.id).select('+password');
+
+  if (!user) {
+    throw new CustomError('User not found, Please login again', 404);
+  }
+
+  const isPasswordMatched = await user.comparePassword(oldPassword);
+
+  if (!isPasswordMatched) {
+    throw new CustomError('Old Password is incorrect', 400);
+  }
+
+  if (newPassword !== confirmPassword) {
+    throw new CustomError(
+      'New Password and Confirm Password does not match',
+      400
+    );
+  }
+
+  user.password = newPassword;
+  await user.save();
+
+  sendToken(user, 200, res);
 });
