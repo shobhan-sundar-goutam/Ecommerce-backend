@@ -155,7 +155,7 @@ export const resetPassword = asyncHandler(async (req, res) => {
   sendToken(user, 200, res);
 });
 
-export const getUserProfileDetails = asyncHandler(async (req, res) => {
+export const getUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user.id);
 
   if (!user) {
@@ -198,4 +198,25 @@ export const changePassword = asyncHandler(async (req, res) => {
   await user.save();
 
   sendToken(user, 200, res);
+});
+
+export const updateUserProfile = asyncHandler(async (req, res) => {
+  const { name, email } = req.body;
+
+  const newUserData = { name, email };
+
+  const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
+    new: true,
+    runValidators: true,
+    useFindAndModify: false,
+  });
+
+  if (!user) {
+    throw new CustomError('User not found, Please login again', 404);
+  }
+
+  res.status(200).json({
+    success: true,
+    user,
+  });
 });
