@@ -24,7 +24,7 @@ export const isLoggedIn = asyncHandler(async (req, _res, next) => {
   }
 });
 
-export const authorizedRoles = (...roles) => (req, _res, next) => {
+export const authorizedRoles = (...roles) => asyncHandler(async (req, _res, next) => {
     if (!roles.includes(req.user.role)) {
       throw new CustomError(
         `Role: ${req.user.role} is not allowed to access this resource`,
@@ -33,4 +33,4 @@ export const authorizedRoles = (...roles) => (req, _res, next) => {
     }
 
     next();
-  };
+});
