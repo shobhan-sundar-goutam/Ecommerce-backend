@@ -220,3 +220,71 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
     user,
   });
 });
+
+// ADMIN controllers
+
+export const getAllUsers = asyncHandler(async (_req, res) => {
+  const users = await User.find();
+
+  if (!users) {
+    throw new CustomError('No users found', 404);
+  }
+
+  res.status(200).json({
+    success: true,
+    users
+  });
+});
+
+export const getUserById = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const user = await User.findById(id);
+
+  if (!user) {
+    throw new CustomError(`User does not exist with id :- ${id}`, 404);
+  }
+
+  res.status(200).json({
+    success: true,
+    user
+  });
+});
+
+export const updateUserRole = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const { name, email, role } = req.body;
+
+  const newUserData = { name, email, role };
+
+  const user = await User.findByIdAndUpdate(id, newUserData, {
+    new: true,
+    runValidators: true,
+    useFindAndModify: false,
+  });
+
+  if (!user) {
+    throw new CustomError(`User does not exist with id :- ${id}`, 404);
+  }
+
+  res.status(200).json({
+    success: true,
+    message: `The role of ${user.name} is updated to ${user.role}`,
+    user,
+  });
+});
+
+export const deleteUser = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const user = await User.findByIdAndDelete(id);
+
+  if (!user) {
+    throw new CustomError(`User does not exist with id :- ${id}`, 404);
+  }
+
+  res.status(200).json({
+    success: true,
+    message: 'User deleted successfully',
+    user,
+  });
+});
