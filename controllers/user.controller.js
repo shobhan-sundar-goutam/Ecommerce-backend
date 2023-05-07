@@ -2,8 +2,8 @@ import crypto from 'crypto';
 import User from '../models/user.schema.js';
 import asyncHandler from '../utils/asyncHandler.js';
 import CustomError from '../utils/customError.js';
-import sendToken from '../utils/sendToken.js';
 import sendEmail from '../utils/sendEmail.js';
+import sendToken from '../utils/sendToken.js';
 
 export const signUp = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;

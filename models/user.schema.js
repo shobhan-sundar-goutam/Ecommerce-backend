@@ -1,10 +1,10 @@
+import bcrypt from 'bcryptjs';
+import crypto from 'crypto';
+import JWT from 'jsonwebtoken';
 import mongoose from 'mongoose';
 import validator from 'validator';
-import bcrypt from 'bcryptjs';
-import JWT from 'jsonwebtoken';
-import crypto from 'crypto';
-import AuthRoles from '../utils/authRoles.js';
 import config from '../config/index.js';
+import AuthRoles from '../utils/authRoles.js';
 
 const userSchema = new mongoose.Schema(
   {

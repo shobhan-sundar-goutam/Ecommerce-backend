@@ -18,7 +18,6 @@
     "func-names": "off",
     "object-shorthand": "off",
     "no-return-await": "off",
-    "operator-linebreak": "off",
     "prettier/prettier": [
       "off",
       {
