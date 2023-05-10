@@ -1,5 +1,6 @@
 import cookieParser from 'cookie-parser';
 import express from 'express';
+import fileUpload from 'express-fileupload';
 
 // Routes
 import category from './routes/category.route.js';
@@ -11,6 +12,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(fileUpload());
 
 app.use('/api/v1', category);
 app.use('/api/v1', user);
