@@ -1,17 +1,17 @@
 import express from 'express';
 import {
-  changePassword,
-  deleteUser,
-  forgotPassword,
-  getAllUsers,
-  getUserById,
-  getUserProfile,
-  login,
-  logout,
-  resetPassword,
-  signUp,
-  updateUserProfile,
-  updateUserRole,
+    changePassword,
+    deleteUser,
+    forgotPassword,
+    getAllUsers,
+    getUserById,
+    getUserProfile,
+    login,
+    logout,
+    resetPassword,
+    signUp,
+    updateUserProfile,
+    updateUserRole,
 } from '../controllers/user.controller.js';
 import { authorizedRoles, isLoggedIn } from '../middlewares/auth.middleware.js';
 import AuthRoles from '../utils/authRoles.js';

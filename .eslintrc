@@ -1,5 +1,5 @@
 {
-  "extends": ["prettier", "airbnb-base"],
+  "extends": ["airbnb-base", "eslint:recommended", "prettier"],
   "parserOptions": {
     "ecmaVersion": 12
   },
