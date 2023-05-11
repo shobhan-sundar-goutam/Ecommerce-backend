@@ -19,7 +19,7 @@
     "object-shorthand": "off",
     "no-return-await": "off",
     "prettier/prettier": [
-      "off",
+      "warn",
       {
         "trailingComma": "es5",
         "singleQuote": true,

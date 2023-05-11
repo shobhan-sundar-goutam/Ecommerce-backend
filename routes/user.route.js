@@ -13,7 +13,7 @@ import {
   updateUserProfile,
   updateUserRole,
 } from '../controllers/user.controller.js';
-import { authorizedRoles, isLoggedIn, } from '../middlewares/auth.middleware.js';
+import { authorizedRoles, isLoggedIn } from '../middlewares/auth.middleware.js';
 import AuthRoles from '../utils/authRoles.js';
 
 const router = express.Router();

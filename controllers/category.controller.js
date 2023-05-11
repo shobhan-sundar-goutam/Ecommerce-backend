@@ -19,7 +19,7 @@ export const createCategory = asyncHandler(async (req, res) => {
     res.status(201).json({
         success: true,
         message: `${category.name} category is created`,
-        category
+        category,
     });
 });
 
@@ -37,7 +37,7 @@ export const updateCategory = asyncHandler(async (req, res) => {
     res.status(200).json({
         success: true,
         message: `category is updated to ${category.name}`,
-        category
+        category,
     });
 });
 
@@ -51,7 +51,7 @@ export const deleteCategory = asyncHandler(async (req, res) => {
     res.status(200).json({
         success: true,
         message: `${category.name} category is deleted`,
-        category
+        category,
     });
 });
 
@@ -64,6 +64,6 @@ export const getAllCategories = asyncHandler(async (req, res) => {
 
     res.status(200).json({
         success: true,
-        categories
+        categories,
     });
 });

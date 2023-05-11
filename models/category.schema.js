@@ -1,16 +1,16 @@
 import mongoose from 'mongoose';
 
 const categorySchema = new mongoose.Schema(
-  {
-    name: {
-      type: String,
-      required: [true, 'Please provide a category name'],
-      trim: true,
-      maxLength: [120, 'Category name should not be more than 120 characters'],
-      unique: true
+    {
+        name: {
+            type: String,
+            required: [true, 'Please provide a category name'],
+            trim: true,
+            maxLength: [120, 'Category name should not be more than 120 characters'],
+            unique: true,
+        },
     },
-  },
-  { timestamps: true }
+    { timestamps: true }
 );
 
 export default mongoose.model('Category', categorySchema);
