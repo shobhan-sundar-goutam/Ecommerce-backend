@@ -12,8 +12,8 @@ const router = express.Router();
 
 router.get('/categories', getAllCategories);
 
-router.post('/category', isLoggedIn, authorizedRoles(AuthRoles.ADMIN), createCategory);
-router.put('/category/:id', isLoggedIn, authorizedRoles(AuthRoles.ADMIN), updateCategory);
-router.delete('/category/:id', isLoggedIn, authorizedRoles(AuthRoles.ADMIN), deleteCategory);
+router.post('/admin/category', isLoggedIn, authorizedRoles(AuthRoles.ADMIN), createCategory);
+router.put('/admin/category/:id', isLoggedIn, authorizedRoles(AuthRoles.ADMIN), updateCategory);
+router.delete('/admin/category/:id', isLoggedIn, authorizedRoles(AuthRoles.ADMIN), deleteCategory);
 
 export default router;
