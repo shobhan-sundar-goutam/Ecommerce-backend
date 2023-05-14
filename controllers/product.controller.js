@@ -1,6 +1,7 @@
 import Product from '../models/product.schema.js';
 import asyncHandler from '../utils/asyncHandler.js';
 import CustomError from '../utils/customError.js';
+import SearchFilters from '../utils/searchFilters.js';
 
 export const createProduct = asyncHandler(async (req, res) => {
     const product = await Product.create(req.body);
@@ -11,7 +12,28 @@ export const createProduct = asyncHandler(async (req, res) => {
     });
 });
 
-export const getAllProducts = asyncHandler(async (_req, res) => {
+export const getAllProducts = asyncHandler(async (req, res) => {
+    const resultPerPage = 6;
+    const totalProductsCount = await Product.countDocuments();
+
+    const searchFilters = new SearchFilters(Product.find(), req.query).search().filter();
+    let products = await searchFilters.modelFind;
+
+    const filteredProductsCount = products.length;
+
+    searchFilters.pagination(resultPerPage);
+    products = await searchFilters.modelFind.clone();
+
+    res.status(200).json({
+        success: true,
+        products,
+        resultPerPage,
+        totalProductsCount,
+        filteredProductsCount,
+    });
+});
+
+export const getAllProductsForAdmin = asyncHandler(async (_req, res) => {
     const products = await Product.find();
 
     if (!products) {
