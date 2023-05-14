@@ -8,7 +8,7 @@ class SearchFilters {
         const searchWord = this.query.search
             ? {
                   name: {
-                      $regex: this.big.search,
+                      $regex: this.query.search,
                       $options: 'i',
                   },
               }
