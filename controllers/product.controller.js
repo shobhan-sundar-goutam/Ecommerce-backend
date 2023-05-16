@@ -4,6 +4,8 @@ import CustomError from '../utils/customError.js';
 import SearchFilters from '../utils/searchFilters.js';
 
 export const createProduct = asyncHandler(async (req, res) => {
+    req.body.user = req.user.id;
+
     const product = await Product.create(req.body);
 
     res.status(201).json({
