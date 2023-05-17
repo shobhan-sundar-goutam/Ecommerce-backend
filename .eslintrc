@@ -18,6 +18,10 @@
     "func-names": "off",
     "object-shorthand": "off",
     "no-return-await": "off",
+    "no-shadow": "off",
+    "no-unused-expressions": "off",
+    "no-sequences": "off",
+    "no-param-reassign": "off",
     "prettier/prettier": [
       "warn",
       {
